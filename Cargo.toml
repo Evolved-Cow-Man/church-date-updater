@@ -1,0 +1,18 @@
+[package]
+name = "church-date-updater"
+version = "3.2.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+chrono = "0.4.24"
+bdays = "0.1.3"
+dialoguer = "0.10.3"
+colored = "2.0.0"
+
+#lib youtube title
+google-youtube3 = "5.0.2"
+hyper = "0.14.25"
+hyper-rustls = "0.23.2"
+tokio = { version = "1.26.0", features = ["macros", "rt-multi-thread"] }

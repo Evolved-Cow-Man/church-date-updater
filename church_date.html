@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="myText"></div>
+
+  <style>
+    #myText {
+      font-family: Arial;
+      font-size: 56px;
+      font-weight: bold;
+      color: #5f3915;
+      position: absolute;
+      top: 15%;
+      right: 0;
+      animation: flyInOut 60s ease-in-out infinite;
+    }
+
+    @keyframes flyInOut {
+      0% {opacity: 0;}
+      2% {opacity: 1;}
+      98% {opacity: 1;}
+      100% {opacity: 0;}
+    }
+  </style>
+
+  <script>
+    const myText = document.getElementById('myText');
+    let texts = [""];
+    //do it once + set the text the first time
+    fetch('lower_data.txt')
+      .then(response => response.text())
+      .then(data => {
+        texts = data.split('\n').slice(0, -1); //exclude last element
+      myText.textContent = texts[0];
+    });
+
+    //keep the text up to date every 5 seconds
+    setInterval(function() {
+      fetch('lower_data.txt')
+        .then(response => response.text())
+        .then(data => {
+          texts = data.split('\n').slice(0, -1); //exclude last element
+        });
+    }, 5000);
+
+    let index = 0;
+    myText.addEventListener('animationiteration', () => {
+      if (texts.length > 0) {
+        index = (index + 1) % texts.length;
+        myText.textContent = texts[index];
+      }
+    });
+  </script>
+</body>
+</html>
