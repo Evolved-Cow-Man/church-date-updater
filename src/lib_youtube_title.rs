@@ -87,8 +87,8 @@ pub async fn update_youtube_title(new_title: String) {
                                     //I need to return something here, but this should in no way be used.
                                     String::from(" ")
                                 } else {
-                                    //I need to return something here, but this should in no way be used.
-                                    String::from(" ")
+                                    println!("Not updating the youtube title.");
+                                    return;
                                 }
                             }
                         }
