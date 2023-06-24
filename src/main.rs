@@ -129,7 +129,7 @@ fn main() {
         "Red".red(),
         "Yellow".yellow(),
         "Blue".blue(),
-        "black".black()
+        "Black".white() //some terminals will display black as background color
     ];
 
     let possible_strings = &[
