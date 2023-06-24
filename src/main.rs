@@ -219,7 +219,12 @@ fn main() {
         println!("Okay, using '{youtube_church_date_formated}'.")
     }
 
-    update_youtube_title(youtube_church_date_formated);
+    //test for secret.json 
+    if fs::metadata("secret.json").is_ok() {
+        update_youtube_title(youtube_church_date_formated);
+    } else {
+        println!("'secret.json' does not exist. Not updating youtube title.");
+    }
 
     //wait a little bit so they can read the text
     let wait_time = std::time::Duration::from_secs(3);
