@@ -119,8 +119,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "church-date-updater"
-version = "3.3.0"
+name = "church-date-updater-3-3-1"
+version = "3.3.1"
 dependencies = [
  "bdays",
  "chrono",
