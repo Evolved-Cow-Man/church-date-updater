@@ -1,5 +1,5 @@
 use chrono::{Datelike, Duration, NaiveDate, Weekday};
-use std::{collections::BTreeMap};
+use std::collections::BTreeMap;
 
 #[derive(Copy, Clone)]
 pub enum OrdinalLength {

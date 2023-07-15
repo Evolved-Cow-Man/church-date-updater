@@ -129,7 +129,8 @@ fn main() {
         "Red".red(),
         "Yellow".yellow(),
         "Blue".blue(),
-        "Black".white() //some terminals will display black as background color
+        "Black".white(), //some terminals will display black as background color
+        "None".white()
     ];
 
     let possible_strings = &[
@@ -139,7 +140,8 @@ fn main() {
         "Red",
         "Yellow",
         "Blue",
-        "Black"
+        "Black",
+        "None"
     ];
 
     let suggested_color = next_church_date(current_date, Short).color;
@@ -151,7 +153,7 @@ fn main() {
         Color::Red => 3,
         Color::Yellow => 4,
         Color::Blue => 5,
-        Color::Black => 6,
+        Color::Black => 6
     };
 
     let mut color_string = &possible_colors[suggested_color_value];
