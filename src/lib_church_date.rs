@@ -227,11 +227,11 @@ pub fn next_church_date(current_date: NaiveDate, length: OrdinalLength) -> Churc
     };
     dates.insert(holy_trinity_date, holy_trinity_value);
 
-    //Sundays of Pentecost*
+    //Sundays after Pentecost*
     for week in 9..=33 {
         let ordinal_week = date_ordinal(week - 7, length);
         let pentecost_sundays_value = ChurchDate {
-            church_text: format!("{ordinal_week} Sunday of Pentecost"),
+            church_text: format!("{ordinal_week} Sunday after Pentecost"),
             liturgical_color: Color::Green
         };
         let pentecost_sundays_date = easter_date + Duration::weeks(week);
