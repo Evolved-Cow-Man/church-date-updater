@@ -1,14 +1,14 @@
 use chrono::{Datelike, Local};
+use colored::Colorize;
 use dialoguer::{theme::ColorfulTheme, Confirm, Input, Select};
 use std::fs;
 use std::fs::File;
 use std::io::{BufWriter, Write};
-use colored::Colorize;
 
 mod lib_church_date;
-use lib_church_date::{next_church_date, date_ordinal};
-use lib_church_date::OrdinalLength::{Short, Long};
 use lib_church_date::Color;
+use lib_church_date::OrdinalLength::{Long, Short};
+use lib_church_date::{date_ordinal, next_church_date};
 
 mod lib_youtube_title;
 use lib_youtube_title::update_youtube_title;
@@ -29,7 +29,8 @@ fn main() {
      */
     let obs_church_date = next_church_date(current_date, Short).text;
 
-    let mut obs_church_date_formated = format!("{current_month_formated} {ordinal_month_short}, {obs_church_date}");
+    let mut obs_church_date_formated =
+        format!("{current_month_formated} {ordinal_month_short}, {obs_church_date}");
 
     if Confirm::with_theme(&ColorfulTheme::default())
         .with_prompt(format!("The church date used for OBS looks like this: '{obs_church_date_formated}'. Does this look okay?"))
@@ -37,15 +38,14 @@ fn main() {
         .interact()
         .unwrap()
     {
-        println!("Okay, using '{obs_church_date_formated}' for OBS.");
     } else {
         obs_church_date_formated = Input::with_theme(&ColorfulTheme::default())
             .with_prompt("What should it look like?")
             .with_initial_text(obs_church_date_formated)
             .interact_text()
             .unwrap();
-        println!("Okay, using '{obs_church_date_formated}' for OBS.")
     }
+    println!("Okay, using '{obs_church_date_formated}' for OBS.");
 
     let mut obs_lower_list = vec![obs_church_date_formated];
 
@@ -57,7 +57,7 @@ fn main() {
      * Sermon title
      */
     if Confirm::with_theme(&ColorfulTheme::default())
-        .with_prompt(format!("Would you like to add a sermon title?"))
+        .with_prompt("Would you like to add a sermon title?".to_string())
         .default(true)
         .interact()
         .unwrap()
@@ -67,7 +67,8 @@ fn main() {
             .interact_text()
             .unwrap();
         println!("Okay, using '{sermon_title}' for sermon title.");
-        youtube_church_date_formated = format!("\"{sermon_title}\" - {current_date_formated} - {youtube_church_date}");
+        youtube_church_date_formated =
+            format!("\"{sermon_title}\" - {current_date_formated} - {youtube_church_date}");
         obs_lower_list.push(format!("\"{sermon_title}\""));
     } else {
         println!("Okay, not using a sermon title.");
@@ -81,7 +82,7 @@ fn main() {
 
     while extra_text_retry {
         if Confirm::with_theme(&ColorfulTheme::default())
-            .with_prompt(format!("Would you like to add more text to the lower third for OBS?"))
+            .with_prompt("Would you like to add more text to the lower third for OBS?".to_string())
             .default(false)
             .interact()
             .unwrap()
@@ -99,12 +100,13 @@ fn main() {
     }
 
     //Write church text for OBS to file
+    #[allow(clippy::items_after_statements)]
     fn write_lower_data(obs_lower_list: Vec<String>) -> Result<(), std::io::Error> {
         let file = File::create("lower_data.txt")?;
         let mut writer = BufWriter::new(file);
 
         for item in obs_lower_list {
-            writeln!(writer, "{}", item)?;
+            writeln!(writer, "{item}")?;
         }
 
         writer.flush()?;
@@ -112,11 +114,11 @@ fn main() {
     }
 
     match write_lower_data(obs_lower_list) {
-        Ok(_) => println!("Successfully changed the OBS lower third."),
+        Ok(()) => println!("Successfully changed the OBS lower third."),
         Err(err) => {
             println!("Unable to change the OBS lower third: {err}");
-            println!("You can still continue with the rest of the setup.")
-        },
+            println!("You can still continue with the rest of the setup.");
+        }
     }
 
     /*
@@ -130,18 +132,11 @@ fn main() {
         "Yellow".yellow(),
         "Blue".blue(),
         "Black".white(), //some terminals will display black as background color
-        "None".white()
+        "None".white(),
     ];
 
     let possible_strings = &[
-        "White",
-        "Green",
-        "Purple",
-        "Red",
-        "Yellow",
-        "Blue",
-        "Black",
-        "None"
+        "White", "Green", "Purple", "Red", "Yellow", "Blue", "Black", "None",
     ];
 
     let suggested_color = next_church_date(current_date, Short).color;
@@ -153,7 +148,7 @@ fn main() {
         Color::Red => 3,
         Color::Yellow => 4,
         Color::Blue => 5,
-        Color::Black => 6
+        Color::Black => 6,
     };
 
     let mut color_string = &possible_colors[suggested_color_value];
@@ -161,7 +156,9 @@ fn main() {
     let mut color_string_regular = possible_strings[suggested_color_value];
 
     if Confirm::with_theme(&ColorfulTheme::default())
-        .with_prompt(format!("The liturgical color used for OBS is: '{color_string}'. Does this look okay?"))
+        .with_prompt(format!(
+            "The liturgical color used for OBS is: '{color_string}'. Does this look okay?"
+        ))
         .default(true)
         .interact()
         .unwrap()
@@ -177,7 +174,7 @@ fn main() {
         color_string = &possible_colors[selection];
         println!("Okay, using '{color_string}'.");
 
-        color_string_regular = possible_strings[selection]
+        color_string_regular = possible_strings[selection];
     }
 
     let old_file = format!("pics/{color_string_regular}.png");
@@ -186,19 +183,19 @@ fn main() {
 
     //you need to remove the file first to have OBS know that something changed
     match fs::remove_file(new_file) {
-        Ok(_) => {
+        Ok(()) => {
             std::thread::sleep(std::time::Duration::from_millis(100)); //wait becuase some computers run it too fast
             match fs::copy(old_file, new_file) {
                 Ok(_) => println!("Successfully changed color for OBS."),
                 Err(err) => {
                     println!("Unable to change color for OBS: {err}");
-                    println!("You can still continue with the rest of the setup.")
+                    println!("You can still continue with the rest of the setup.");
                 }
             }
-        },
+        }
         Err(err) => {
             println!("Unable to change color for OBS: {err}");
-            println!("You can still continue with the rest of the setup.")
+            println!("You can still continue with the rest of the setup.");
         }
     }
 
@@ -211,17 +208,17 @@ fn main() {
         .interact()
         .unwrap()
     {
-        println!("Okay, using '{youtube_church_date_formated}'.");
+
     } else {
         youtube_church_date_formated = Input::with_theme(&ColorfulTheme::default())
             .with_prompt("What should it look like?")
             .with_initial_text(youtube_church_date_formated)
             .interact_text()
             .unwrap();
-        println!("Okay, using '{youtube_church_date_formated}'.")
     }
+    println!("Okay, using '{youtube_church_date_formated}'.");
 
-    //test for secret.json 
+    //test for secret.json
     if fs::metadata("secret.json").is_ok() {
         update_youtube_title(youtube_church_date_formated);
     } else {
