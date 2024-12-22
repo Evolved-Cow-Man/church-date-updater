@@ -184,15 +184,17 @@ fn main() {
     //you need to remove the file first to have OBS know that something changed
     match fs::remove_file(new_file) {
         Ok(()) => {
-            std::thread::sleep(std::time::Duration::from_millis(100)); //wait becuase some computers run it too fast
-            match fs::copy(old_file, new_file) {
-                Ok(_) => println!("Successfully changed color for OBS."),
-                Err(err) => {
-                    println!("Unable to change color for OBS: {err}");
-                    println!("You can still continue with the rest of the setup.");
-                }
-            }
+            // Don't need to print anything
         }
+        Err(err) => {
+            println!("Unable to remove old color file for OBS: {err}");
+            println!("This could be because the file does not exist setup will continue.");
+        }
+    }
+
+    std::thread::sleep(std::time::Duration::from_millis(200)); //wait becuase some computers run it too fast, and OBS does not see the new file change
+    match fs::copy(old_file, new_file) {
+        Ok(_) => println!("Successfully changed color for OBS."),
         Err(err) => {
             println!("Unable to change color for OBS: {err}");
             println!("You can still continue with the rest of the setup.");
