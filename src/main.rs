@@ -56,8 +56,18 @@ fn main() {
     /*
      * Sermon title
      */
+    println!("Sermon titles have \"quotes\" added to them automatically.");
+    println!("The title should have already been carefully considered by the person who wrote the sermon.");
+    println!("Examples include: 'All Are Welcome' or '...And Peter'");
+    println!(
+        "Sermon titles are {}",
+        "not names, dates, or other information."
+            .bold()
+            .underline()
+            .red()
+    );
     if Confirm::with_theme(&ColorfulTheme::default())
-        .with_prompt("Would you like to add a sermon title?".to_string())
+        .with_prompt("Would you like to add a sermon title?")
         .default(true)
         .interact()
         .unwrap()
@@ -80,9 +90,11 @@ fn main() {
      */
     let mut extra_text_retry = true;
 
+    let mut extra_text_count = 0;
+
     while extra_text_retry {
         if Confirm::with_theme(&ColorfulTheme::default())
-            .with_prompt("Would you like to add more text to the lower third for OBS?".to_string())
+            .with_prompt("Would you like to add more text to the lower third for OBS?")
             .default(false)
             .interact()
             .unwrap()
@@ -92,6 +104,14 @@ fn main() {
                 .interact_text()
                 .unwrap();
             println!("Okay, adding '{extra_lower_text}' to the OBS lower third.");
+
+            // add the first extra text to the title format
+            extra_text_count += 1;
+            if extra_text_count == 1 {
+                youtube_church_date_formated =
+                    format!("{extra_lower_text} - {current_date_formated} - {youtube_church_date}");
+            }
+
             obs_lower_list.push(extra_lower_text);
         } else {
             println!("Okay, not adding extra text.");
@@ -188,7 +208,7 @@ fn main() {
         }
         Err(err) => {
             println!("Unable to remove old color file for OBS: {err}");
-            println!("This could be because the file does not exist setup will continue.");
+            println!("This could be because the file does not exist, setup will continue.");
         }
     }
 

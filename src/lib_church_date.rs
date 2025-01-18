@@ -71,6 +71,9 @@ struct ChurchDate {
     liturgical_color: Color,
 }
 
+// in the current implementation date isn't used here but as a library I
+// would like it to still be included. This should only apply to one struct.
+#[allow(dead_code)]
 pub struct ChurchDateResult {
     pub date: NaiveDate,
     pub text: String,
