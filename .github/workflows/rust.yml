@@ -40,7 +40,7 @@ jobs:
       run: cargo build -r
 
     - name: make artifact folder
-      run: mkdir church-date-updater-windows; cp target/release/church-date-updater.exe church-date-updater-windows/; cp church_date.html church-date-updater-windows/; cp pics/ church-date-updater-windows/
+      run: mkdir church-date-updater-windows; cp target/release/church-date-updater.exe church-date-updater-windows/; cp church_date.html church-date-updater-windows/; cp -Recurse pics/ church-date-updater-windows/
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
