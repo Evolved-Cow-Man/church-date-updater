@@ -1,6 +1,6 @@
 [package]
-name = "church-date-updater-3-3-4"
-version = "3.3.4"
+name = "church-date-updater"
+version = "3.4.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

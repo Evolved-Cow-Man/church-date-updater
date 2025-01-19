@@ -14,6 +14,10 @@ mod lib_youtube_title;
 use lib_youtube_title::update_youtube_title;
 
 fn main() {
+    // print version
+    let version = env!("CARGO_PKG_VERSION");
+    println!("Church Date Updater {version}");
+
     let current_date = Local::now().date_naive();
 
     let current_date_formated = current_date.format("%m-%d-%y").to_string();
