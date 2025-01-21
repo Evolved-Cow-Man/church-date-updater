@@ -20,11 +20,11 @@ fn main() {
 
     let current_date = Local::now().date_naive();
 
-    let current_date_formated = current_date.format("%m-%d-%y").to_string();
+    let current_date_formatted = current_date.format("%m-%d-%y").to_string();
 
     let current_month_day = current_date.day();
 
-    let current_month_formated = current_date.format("%B");
+    let current_month_formatted = current_date.format("%B");
 
     let ordinal_month_short = date_ordinal(current_month_day.into(), Short);
 
@@ -33,28 +33,28 @@ fn main() {
      */
     let obs_church_date = next_church_date(current_date, Short).text;
 
-    let mut obs_church_date_formated =
-        format!("{current_month_formated} {ordinal_month_short}, {obs_church_date}");
+    let mut obs_church_date_formatted =
+        format!("{current_month_formatted} {ordinal_month_short}, {obs_church_date}");
 
     let mut obs_formatted_date_okay: bool = true;
     if Confirm::with_theme(&ColorfulTheme::default())
-        .with_prompt(format!("The church date used for OBS looks like this: '{obs_church_date_formated}'. Does this look okay?"))
+        .with_prompt(format!("The church date used for OBS looks like this: '{obs_church_date_formatted}'. Does this look okay?"))
         .default(true)
         .interact()
         .unwrap()
     {
     } else {
         obs_formatted_date_okay = false;
-        obs_church_date_formated = Input::with_theme(&ColorfulTheme::default())
+        obs_church_date_formatted = Input::with_theme(&ColorfulTheme::default())
             .with_prompt("What should it look like?")
-            .with_initial_text(obs_church_date_formated)
+            .with_initial_text(obs_church_date_formatted)
             .interact_text()
             .unwrap();
     }
-    println!("Okay, using '{obs_church_date_formated}' for OBS.");
+    println!("Okay, using '{obs_church_date_formatted}' for OBS.");
 
     // clone because we use it later
-    let mut obs_lower_list = vec![obs_church_date_formated.clone()];
+    let mut obs_lower_list = vec![obs_church_date_formatted.clone()];
 
     // if the liturgical date looks okay when it's generated for obs
     // generate another one with a slightly different format 'first' not '1st'
@@ -62,10 +62,10 @@ fn main() {
     let youtube_church_date = if obs_formatted_date_okay {
         next_church_date(current_date, Long).text
     } else {
-        obs_church_date_formated
+        obs_church_date_formatted
     };
 
-    let mut youtube_church_date_formated;
+    let mut youtube_church_date_formatted;
 
     /*
      * Sermon title
@@ -91,12 +91,12 @@ fn main() {
             .interact_text()
             .unwrap();
         println!("Okay, using '{sermon_title}' for sermon title.");
-        youtube_church_date_formated =
-            format!("\"{sermon_title}\" - {current_date_formated} - {youtube_church_date}");
+        youtube_church_date_formatted =
+            format!("\"{sermon_title}\" - {current_date_formatted} - {youtube_church_date}");
         obs_lower_list.push(format!("\"{sermon_title}\""));
     } else {
         println!("Okay, not using a sermon title.");
-        youtube_church_date_formated = format!("{current_date_formated} - {youtube_church_date}");
+        youtube_church_date_formatted = format!("{current_date_formatted} - {youtube_church_date}");
     }
 
     /*
@@ -122,8 +122,8 @@ fn main() {
             // add the first extra text to the title format
             extra_text_count += 1;
             if extra_text_count == 1 {
-                youtube_church_date_formated =
-                    format!("{extra_lower_text} - {current_date_formated} - {youtube_church_date}");
+                youtube_church_date_formatted =
+                    format!("{extra_lower_text} - {current_date_formatted} - {youtube_church_date}");
             }
 
             obs_lower_list.push(extra_lower_text);
@@ -239,24 +239,24 @@ fn main() {
      * Update YouTube api
      */
     if Confirm::with_theme(&ColorfulTheme::default())
-        .with_prompt(format!("The title used for YouTube looks like this: '{youtube_church_date_formated}'. Does this look okay?"))
+        .with_prompt(format!("The title used for YouTube looks like this: '{youtube_church_date_formatted}'. Does this look okay?"))
         .default(true)
         .interact()
         .unwrap()
     {
 
     } else {
-        youtube_church_date_formated = Input::with_theme(&ColorfulTheme::default())
+        youtube_church_date_formatted = Input::with_theme(&ColorfulTheme::default())
             .with_prompt("What should it look like?")
-            .with_initial_text(youtube_church_date_formated)
+            .with_initial_text(youtube_church_date_formatted)
             .interact_text()
             .unwrap();
     }
-    println!("Okay, using '{youtube_church_date_formated}'.");
+    println!("Okay, using '{youtube_church_date_formatted}'.");
 
     //test for secret.json
     if fs::metadata("secret.json").is_ok() {
-        update_youtube_title(youtube_church_date_formated);
+        update_youtube_title(youtube_church_date_formatted);
     } else {
         println!("'secret.json' does not exist. Not updating youtube title.");
     }
