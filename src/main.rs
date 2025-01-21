@@ -36,6 +36,7 @@ fn main() {
     let mut obs_church_date_formated =
         format!("{current_month_formated} {ordinal_month_short}, {obs_church_date}");
 
+    let mut obs_formatted_date_okay: bool = true;
     if Confirm::with_theme(&ColorfulTheme::default())
         .with_prompt(format!("The church date used for OBS looks like this: '{obs_church_date_formated}'. Does this look okay?"))
         .default(true)
@@ -43,6 +44,7 @@ fn main() {
         .unwrap()
     {
     } else {
+        obs_formatted_date_okay = false;
         obs_church_date_formated = Input::with_theme(&ColorfulTheme::default())
             .with_prompt("What should it look like?")
             .with_initial_text(obs_church_date_formated)
@@ -51,9 +53,17 @@ fn main() {
     }
     println!("Okay, using '{obs_church_date_formated}' for OBS.");
 
-    let mut obs_lower_list = vec![obs_church_date_formated];
+    // clone because we use it later
+    let mut obs_lower_list = vec![obs_church_date_formated.clone()];
 
-    let youtube_church_date = next_church_date(current_date, Long).text;
+    // if the liturgical date looks okay when it's generated for obs
+    // generate another one with a slightly different format 'first' not '1st'
+    // if it was changed by the user, use the date that the user set
+    let youtube_church_date = if obs_formatted_date_okay {
+        next_church_date(current_date, Long).text
+    } else {
+        obs_church_date_formated
+    };
 
     let mut youtube_church_date_formated;
 

@@ -23,7 +23,7 @@ jobs:
     - name: make artifact folder
       run: mkdir church-date-updater-linux; cp target/release/church-date-updater church-date-updater-linux/; cp church_date.html church-date-updater-linux/; cp -r pics/ church-date-updater-linux/
 
-    - name: Upload artifact
+    - name: upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: church-date-updater-linux
@@ -42,7 +42,7 @@ jobs:
     - name: make artifact folder
       run: mkdir church-date-updater-windows; cp target/release/church-date-updater.exe church-date-updater-windows/; cp church_date.html church-date-updater-windows/; cp -Recurse pics/ church-date-updater-windows/
 
-    - name: Upload artifact
+    - name: upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: church-date-updater-windows
