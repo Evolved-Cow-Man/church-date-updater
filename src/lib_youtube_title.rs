@@ -87,14 +87,14 @@ pub async fn update_youtube_title(new_title: String) {
             } else {
                 //Ask to try again to find the YouTube ID
                 if Confirm::with_theme(&ColorfulTheme::default())
-                    .with_prompt("Couldn't find any YouTube IDs. Try dissmissing anything in the YouTube studio before trying again. Would you like to try again?".to_string())
+                    .with_prompt("Couldn't find any YouTube IDs. Try dismissing anything in the YouTube studio before trying again. Would you like to try again?".to_string())
                     .default(true)
                     .interact()
                     .unwrap()
                 {
                     //Nothing needs to be done to retry
                 } else {
-                    println!("Not updating the youtube title.");
+                    println!("Not updating the YouTube title.");
                     return;
                 }
             }

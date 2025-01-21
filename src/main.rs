@@ -226,7 +226,7 @@ fn main() {
         }
     }
 
-    std::thread::sleep(std::time::Duration::from_millis(200)); //wait becuase some computers run it too fast, and OBS does not see the new file change
+    std::thread::sleep(std::time::Duration::from_millis(200)); //wait because some computers run it too fast, and OBS does not see the new file change
     match fs::copy(old_file, new_file) {
         Ok(_) => println!("Successfully changed color for OBS."),
         Err(err) => {
